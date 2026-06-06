@@ -23,10 +23,10 @@
 
 - [x] Project setup (Hilt, Room, Navigation, Material 3 theming)
 - [x] Define core domain models: `LabResult`, `Biomarker`, `BiomarkerCategory`
-- [ ] Room database schema + DAOs for results and biomarkers
+- [x] Room database schema + DAOs for results and biomarkers
 - [x] Bottom navigation shell (Dashboard, Biomarkers, History, Settings)
 - [x] App-wide theming (light + dark mode, LabRat brand colors)
-- [ ] Seed with a predefined list of 100+ common biomarkers (name, unit, standard reference range)
+- [x] Seed with a predefined list of 100+ common biomarkers (name, unit, standard reference range)
 
 ---
 
