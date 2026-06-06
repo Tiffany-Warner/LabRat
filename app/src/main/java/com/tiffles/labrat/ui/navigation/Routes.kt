@@ -1,6 +1,23 @@
 package com.tiffles.labrat.ui.navigation
 
-object Routes {
-    // Define screen routes here as constants, e.g.:
-    // const val HOME = "home"
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Science
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
+
+sealed class Routes(
+    val route: String,
+    val label: String,
+    val icon: ImageVector
+) {
+    data object Dashboard : Routes("dashboard", "Dashboard", Icons.Filled.Home)
+    data object Biomarkers : Routes("biomarkers", "Biomarkers", Icons.Filled.Science)
+    data object History : Routes("history", "History", Icons.Filled.History)
+    data object Settings : Routes("settings", "Settings", Icons.Filled.Settings)
+
+    companion object {
+        val tabs = listOf(Dashboard, Biomarkers, History, Settings)
+    }
 }

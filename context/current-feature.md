@@ -28,7 +28,6 @@ Add bottom navigation with 4 tabs and placeholder screens for each. This complet
 4. Settings
 
 ### Notes
-
 - Each placeholder screen: centered `Text` with the screen name, nothing else
 - Use `NavigationBar` / `NavigationBarItem` (Material 3)
 - Routes as a sealed class with `object` entries, each with a `route: String`, `label: String`, and `icon: ImageVector`
