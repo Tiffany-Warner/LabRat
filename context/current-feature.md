@@ -4,7 +4,7 @@ Phase 1.3 — Room Database
 
 ## Status
 
-In-Progress
+Complete
 
 ## Goals
 
