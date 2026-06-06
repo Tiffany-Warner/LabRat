@@ -22,7 +22,7 @@
 > Goal: Core data model and app skeleton. Nothing fancy, just solid.
 
 - [x] Project setup (Hilt, Room, Navigation, Material 3 theming)
-- [ ] Define core domain models: `LabResult`, `Biomarker`, `BiomarkerCategory`
+- [x] Define core domain models: `LabResult`, `Biomarker`, `BiomarkerCategory`
 - [ ] Room database schema + DAOs for results and biomarkers
 - [x] Bottom navigation shell (Dashboard, Biomarkers, History, Settings)
 - [x] App-wide theming (light + dark mode, LabRat brand colors)
