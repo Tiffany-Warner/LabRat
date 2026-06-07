@@ -14,7 +14,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.tiffles.labrat.ui.addresult.AddLabResultScreen
+import com.tiffles.labrat.ui.addresult.AddLabResultViewModel
+import com.tiffles.labrat.ui.addresult.BiomarkerPickerScreen
 import com.tiffles.labrat.ui.biomarkers.BiomarkersScreen
 import com.tiffles.labrat.ui.dashboard.DashboardScreen
 import com.tiffles.labrat.ui.history.HistoryScreen
@@ -34,10 +38,21 @@ fun LabRatNavHost(
         composable(Routes.Biomarkers.route) { BiomarkersScreen() }
         composable(Routes.History.route) { HistoryScreen() }
         composable(Routes.Settings.route) { SettingsScreen() }
-        composable(NavRoutes.AddLabResult.route) {
+        composable(NavRoutes.AddLabResult.route) { entry ->
+            val viewModel: AddLabResultViewModel = hiltViewModel(entry)
             AddLabResultScreen(
                 onNavigateUp = { navController.navigateUp() },
-                onAddValues = { /* Phase 2.2 — Biomarker Picker */ },
+                onAddValues = { navController.navigate(NavRoutes.BiomarkerPicker.route) },
+                viewModel = viewModel,
+            )
+        }
+        composable(NavRoutes.BiomarkerPicker.route) { entry ->
+            val parentEntry = remember(entry) {
+                navController.getBackStackEntry(NavRoutes.AddLabResult.route)
+            }
+            BiomarkerPickerScreen(
+                onNavigateUp = { navController.navigateUp() },
+                viewModel = hiltViewModel(parentEntry),
             )
         }
     }

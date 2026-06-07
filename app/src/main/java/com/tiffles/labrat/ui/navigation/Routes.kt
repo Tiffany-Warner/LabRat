@@ -24,4 +24,5 @@ sealed class Routes(
 
 sealed class NavRoutes(val route: String) {
     data object AddLabResult : NavRoutes("add_lab_result")
+    data object BiomarkerPicker : NavRoutes("biomarker_picker")
 }
