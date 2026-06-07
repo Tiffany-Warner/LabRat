@@ -31,7 +31,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tiffles.labrat.ui.theme.LabRatTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -52,33 +50,6 @@ private val MILLIS_PER_DAY = TimeUnit.DAYS.toMillis(1)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddLabResultScreen(
-    onNavigateUp: () -> Unit,
-    onAddValues: () -> Unit,
-    viewModel: AddLabResultViewModel,
-    modifier: Modifier = Modifier,
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.navigateUp.collect { onNavigateUp() }
-    }
-
-    AddLabResultContent(
-        uiState = uiState,
-        onNavigateUp = onNavigateUp,
-        onAddValues = onAddValues,
-        onDateSelected = viewModel::updateDate,
-        onLabNameChange = viewModel::updateLabName,
-        onNotesChange = viewModel::updateNotes,
-        onRemoveEntry = viewModel::removeEntry,
-        onSave = viewModel::saveLabResult,
-        modifier = modifier,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AddLabResultContent(
     uiState: AddLabResultUiState,
     onNavigateUp: () -> Unit,
     onAddValues: () -> Unit,
@@ -244,7 +215,7 @@ private fun BiomarkerEntryRow(
 @Composable
 private fun AddLabResultScreenEmptyPreview() {
     LabRatTheme {
-        AddLabResultContent(
+        AddLabResultScreen(
             uiState = AddLabResultUiState(
                 date = LocalDate.of(2026, 6, 7),
                 labName = "",
@@ -265,7 +236,7 @@ private fun AddLabResultScreenEmptyPreview() {
 @Composable
 private fun AddLabResultScreenWithEntriesPreview() {
     LabRatTheme {
-        AddLabResultContent(
+        AddLabResultScreen(
             uiState = AddLabResultUiState(
                 date = LocalDate.of(2026, 6, 7),
                 labName = "Quest Diagnostics",

@@ -34,6 +34,9 @@ class AddLabResultViewModel @Inject constructor(
     private val _navigateUp = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val navigateUp: SharedFlow<Unit> = _navigateUp.asSharedFlow()
 
+    private val _entryAdded = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val entryAdded: SharedFlow<Unit> = _entryAdded.asSharedFlow()
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
@@ -51,8 +54,11 @@ class AddLabResultViewModel @Inject constructor(
     fun updateNotes(notes: String) = _uiState.update { it.copy(notes = notes) }
     fun updateSearchQuery(query: String) = _searchQuery.update { query }
 
-    fun addEntry(draft: BiomarkerEntryDraft) =
+    fun addEntry(draft: BiomarkerEntryDraft) {
         _uiState.update { it.copy(pendingEntries = it.pendingEntries + draft) }
+        _searchQuery.update { "" }
+        _entryAdded.tryEmit(Unit)
+    }
 
     fun removeEntry(draft: BiomarkerEntryDraft) =
         _uiState.update { it.copy(pendingEntries = it.pendingEntries - draft) }

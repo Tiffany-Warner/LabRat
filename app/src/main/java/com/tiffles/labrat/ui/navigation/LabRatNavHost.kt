@@ -5,17 +5,19 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.tiffles.labrat.ui.addresult.AddLabResultScreen
 import com.tiffles.labrat.ui.addresult.AddLabResultViewModel
 import com.tiffles.labrat.ui.addresult.BiomarkerPickerScreen
@@ -31,28 +33,51 @@ fun LabRatNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.Dashboard.route,
+        startDestination = TabRoutes.Dashboard.route,
         modifier = modifier
     ) {
-        composable(Routes.Dashboard.route) { DashboardScreen() }
-        composable(Routes.Biomarkers.route) { BiomarkersScreen() }
-        composable(Routes.History.route) { HistoryScreen() }
-        composable(Routes.Settings.route) { SettingsScreen() }
-        composable(NavRoutes.AddLabResult.route) { entry ->
+        composable(TabRoutes.Dashboard.route) { DashboardScreen() }
+        composable(TabRoutes.Biomarkers.route) { BiomarkersScreen() }
+        composable(TabRoutes.History.route) { HistoryScreen() }
+        composable(TabRoutes.Settings.route) { SettingsScreen() }
+        composable(FullScreenRoutes.AddLabResult.route) { entry ->
             val viewModel: AddLabResultViewModel = hiltViewModel(entry)
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            LaunchedEffect(viewModel) {
+                viewModel.navigateUp.collect { navController.navigateUp() }
+            }
             AddLabResultScreen(
+                uiState = uiState,
                 onNavigateUp = { navController.navigateUp() },
-                onAddValues = { navController.navigate(NavRoutes.BiomarkerPicker.route) },
-                viewModel = viewModel,
+                onAddValues = { navController.navigate(FullScreenRoutes.BiomarkerPicker.route) },
+                onDateSelected = viewModel::updateDate,
+                onLabNameChange = viewModel::updateLabName,
+                onNotesChange = viewModel::updateNotes,
+                onRemoveEntry = viewModel::removeEntry,
+                onSave = viewModel::saveLabResult,
             )
         }
-        composable(NavRoutes.BiomarkerPicker.route) { entry ->
+        composable(FullScreenRoutes.BiomarkerPicker.route) { entry ->
             val parentEntry = remember(entry) {
-                navController.getBackStackEntry(NavRoutes.AddLabResult.route)
+                navController.getBackStackEntry(FullScreenRoutes.AddLabResult.route)
+            }
+            val viewModel: AddLabResultViewModel = hiltViewModel(parentEntry)
+            val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+            val biomarkers by viewModel.filteredBiomarkers.collectAsStateWithLifecycle()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val addedIds = remember(uiState.pendingEntries) {
+                uiState.pendingEntries.map { it.biomarkerId }.toSet()
+            }
+            LaunchedEffect(viewModel) {
+                viewModel.entryAdded.collect { navController.navigateUp() }
             }
             BiomarkerPickerScreen(
                 onNavigateUp = { navController.navigateUp() },
-                viewModel = hiltViewModel(parentEntry),
+                searchQuery = searchQuery,
+                biomarkers = biomarkers,
+                addedIds = addedIds,
+                onSearchQueryChange = viewModel::updateSearchQuery,
+                onEntryConfirmed = viewModel::addEntry,
             )
         }
     }
@@ -64,7 +89,7 @@ fun LabRatBottomBar(navController: NavController) {
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar {
-        Routes.tabs.forEach { tab ->
+        TabRoutes.tabs.forEach { tab ->
             NavigationBarItem(
                 icon = { Icon(tab.icon, contentDescription = tab.label) },
                 label = { Text(tab.label) },

@@ -6,14 +6,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.tiffles.labrat.R
 
-val InterFontFamily = FontFamily(
+private val InterFontFamily = FontFamily(
     Font(R.font.inter_regular, FontWeight.Normal),
     Font(R.font.inter_medium, FontWeight.Medium),
     Font(R.font.inter_semibold, FontWeight.SemiBold),
     Font(R.font.inter_bold, FontWeight.Bold),
 )
 
-val baseline = Typography()
+private val baseline = Typography()
 
 val AppTypography = Typography(
     displayLarge = baseline.displayLarge.copy(fontFamily = InterFontFamily),

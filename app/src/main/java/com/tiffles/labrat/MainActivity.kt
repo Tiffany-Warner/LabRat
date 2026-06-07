@@ -18,8 +18,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tiffles.labrat.ui.navigation.LabRatBottomBar
 import com.tiffles.labrat.ui.navigation.LabRatNavHost
-import com.tiffles.labrat.ui.navigation.NavRoutes
-import com.tiffles.labrat.ui.navigation.Routes
+import com.tiffles.labrat.ui.navigation.FullScreenRoutes
+import com.tiffles.labrat.ui.navigation.TabRoutes
 import com.tiffles.labrat.ui.theme.LabRatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,9 +45,9 @@ private fun LabRatApp() {
     Scaffold(
         bottomBar = { LabRatBottomBar(navController) },
         floatingActionButton = {
-            if (currentDestination?.hierarchy?.any { it.route == Routes.Dashboard.route } == true) {
+            if (currentDestination?.hierarchy?.any { it.route == TabRoutes.Dashboard.route } == true) {
                 FloatingActionButton(
-                    onClick = { navController.navigate(NavRoutes.AddLabResult.route) }
+                    onClick = { navController.navigate(FullScreenRoutes.AddLabResult.route) }
                 ) {
                     Icon(Icons.Filled.Add, contentDescription = "Add Lab Result")
                 }

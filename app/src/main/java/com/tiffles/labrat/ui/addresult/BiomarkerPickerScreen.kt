@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tiffles.labrat.domain.model.Biomarker
 import com.tiffles.labrat.domain.model.BiomarkerCategory
 
@@ -40,16 +39,13 @@ import com.tiffles.labrat.domain.model.BiomarkerCategory
 @Composable
 fun BiomarkerPickerScreen(
     onNavigateUp: () -> Unit,
-    viewModel: AddLabResultViewModel,
+    searchQuery: String,
+    biomarkers: List<Biomarker>,
+    addedIds: Set<Long>,
+    onSearchQueryChange: (String) -> Unit,
+    onEntryConfirmed: (BiomarkerEntryDraft) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
-    val biomarkers by viewModel.filteredBiomarkers.collectAsStateWithLifecycle()
-
-    val addedIds = remember(uiState.pendingEntries) {
-        uiState.pendingEntries.map { it.biomarkerId }.toSet()
-    }
     val grouped = remember(biomarkers) {
         biomarkers
             .groupBy { it.category }
@@ -62,7 +58,7 @@ fun BiomarkerPickerScreen(
         ValueInputDialog(
             biomarker = biomarker,
             onConfirm = { value ->
-                viewModel.addEntry(
+                onEntryConfirmed(
                     BiomarkerEntryDraft(
                         biomarkerId = biomarker.id,
                         biomarkerName = biomarker.name,
@@ -71,7 +67,6 @@ fun BiomarkerPickerScreen(
                     )
                 )
                 selectedBiomarker = null
-                onNavigateUp()
             },
             onDismiss = { selectedBiomarker = null },
         )
@@ -96,12 +91,12 @@ fun BiomarkerPickerScreen(
         ) {
             OutlinedTextField(
                 value = searchQuery,
-                onValueChange = viewModel::updateSearchQuery,
+                onValueChange = onSearchQueryChange,
                 placeholder = { Text("Search biomarkers") },
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { viewModel.updateSearchQuery("") }) {
+                        IconButton(onClick = { onSearchQueryChange("") }) {
                             Icon(Icons.Filled.Close, contentDescription = "Clear search")
                         }
                     }
