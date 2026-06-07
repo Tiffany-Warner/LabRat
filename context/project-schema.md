@@ -34,11 +34,12 @@
 
 > Goal: Users can log their lab results manually.
 
-- [ ] Add Lab Result screen — select date, lab name (optional)
+- [x] Add Lab Result screen — select date, lab name (optional)
 - [ ] Add/edit individual biomarker values within a result
 - [ ] Biomarker picker — searchable, grouped by category (e.g. Metabolic, Lipids, CBC, Hormones, Thyroid, Vitamins, Inflammation)
 - [ ] Input validation (numeric ranges, units)
-- [ ] Save/delete lab result
+- [x] Save lab result
+- [ ] Delete lab result
 - [ ] Empty state on Dashboard when no data exists
 
 ---

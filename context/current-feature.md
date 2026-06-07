@@ -4,7 +4,7 @@ Phase 2.1 — Add Lab Result Screen
 
 ## Status
 
-In-Progress
+Complete
 
 ## Goals
 
@@ -55,3 +55,8 @@ Build the screen where users create a new lab result entry — date, optional la
 - Repository interfaces defined (`BiomarkerRepository`, `LabResultRepository`, `BiomarkerEntryRepository`)
 - Room database layer implemented — entities, TypeConverter, DAOs, AppDatabase, mappers, repository impls, Hilt module
 - 109 biomarkers seeded across all 13 categories, verified via Database Inspector
+- Add Lab Result screen implemented — date picker, lab name, notes, entry list with remove, error display
+- SaveLabResultUseCase with atomic @Transaction DAO insert for LabResult + BiomarkerEntry rows
+- FAB on Dashboard navigates to Add Lab Result; NavRoutes sealed class added for non-tab destinations
+- BiomarkerEntryDraft and AddLabResultUiState extracted to AddLabResultModels.kt for Phase 2.2 reuse
+- LabResultDaoTest added
