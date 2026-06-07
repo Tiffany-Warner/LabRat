@@ -18,6 +18,10 @@ sealed class Routes(
     data object Settings : Routes("settings", "Settings", Icons.Filled.Settings)
 
     companion object {
-        val tabs = listOf(Dashboard, Biomarkers, History, Settings)
+        val tabs by lazy { listOf(Dashboard, Biomarkers, History, Settings) }
     }
+}
+
+sealed class NavRoutes(val route: String) {
+    data object AddLabResult : NavRoutes("add_lab_result")
 }

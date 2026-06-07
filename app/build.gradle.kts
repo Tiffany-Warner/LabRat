@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.hilt.android)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.room.runtime)

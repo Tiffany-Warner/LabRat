@@ -14,6 +14,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.tiffles.labrat.ui.addresult.AddLabResultScreen
 import com.tiffles.labrat.ui.biomarkers.BiomarkersScreen
 import com.tiffles.labrat.ui.dashboard.DashboardScreen
 import com.tiffles.labrat.ui.history.HistoryScreen
@@ -33,6 +34,12 @@ fun LabRatNavHost(
         composable(Routes.Biomarkers.route) { BiomarkersScreen() }
         composable(Routes.History.route) { HistoryScreen() }
         composable(Routes.Settings.route) { SettingsScreen() }
+        composable(NavRoutes.AddLabResult.route) {
+            AddLabResultScreen(
+                onNavigateUp = { navController.navigateUp() },
+                onAddValues = { /* Phase 2.2 — Biomarker Picker */ },
+            )
+        }
     }
 }
 
