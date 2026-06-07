@@ -1,46 +1,46 @@
 # Current Feature
 
-Phase 2.1 — Add Lab Result Screen
+Phase 2.2 — Biomarker Picker Screen
 
 ## Status
 
-Complete
+In-Progress
 
 ## Goals
 
-Build the screen where users create a new lab result entry — date, optional lab name, optional notes, and a list of biomarker values. Saving is disabled until at least one value is added.
+A searchable, categorized list of all biomarkers. The user picks one, enters a value, and returns to the Add Lab Result screen with the entry added.
 
 ### Deliverables
 
-**Screen** (`ui/addresult/AddLabResultScreen.kt`)
-- Accessible via FAB on the Dashboard
-- Date picker (defaults to today) — `DatePickerDialog`
-- Lab name text field (optional)
-- Notes text field (optional, multiline)
-- "Add Values" button — navigates to Biomarker Picker (Phase 2.2)
-- List of added biomarker entries with value, unit, and remove (×) button
-- "Save" button — disabled until at least one entry exists
-- "Cancel" button — dismisses without saving
+**Screen** (`ui/addresult/BiomarkerPickerScreen.kt`)
+- Full screen (not a bottom sheet)
+- Search bar at the top — filters biomarkers by name in real time
+- Results grouped by `BiomarkerCategory` with sticky section headers
+- Each row shows biomarker name and unit
+- Already-added biomarkers shown with a checkmark and muted style — still tappable to re-add
+- Tapping a biomarker opens `ValueInputDialog`
 
-**ViewModel** (`ui/addresult/AddLabResultViewModel.kt`)
-- `UiState` holds: date, labName, notes, `pendingEntries: List<BiomarkerEntryDraft>`
-- `BiomarkerEntryDraft` — lightweight model: biomarkerId, biomarkerName, unit, value
-- Exposes: `updateDate()`, `updateLabName()`, `updateNotes()`, `removeEntry()`, `addEntry()`, `saveLabResult()`
-- `saveLabResult()` — delegates to `SaveLabResultUseCase`, navigates back on success
+**Value Input Dialog** (`ui/addresult/ValueInputDialog.kt`)
+- Shows biomarker name, unit, and reference range as helper text
+- Numeric input field (positive numbers only)
+- "Add" button — disabled until input is valid
+- "Cancel" dismisses the dialog
+- On confirm: calls `addEntry()` on the shared ViewModel and navigates back
 
-**Use Case** (`domain/usecase/SaveLabResultUseCase.kt`)
-- Takes a `LabResult` + `List<BiomarkerEntry>`
-- Saves both atomically in a single Room transaction
-- Returns `Result<Unit>`
+**ViewModel**
+- Reuse shared `AddLabResultViewModel` scoped to the nav back stack
+- Expose `allBiomarkers: Flow<List<Biomarker>>` and `searchQuery` state
+- Filter biomarkers client-side based on `searchQuery`
 
 ## Notes
 
-- Biomarker Picker (Phase 2.2) is a separate screen — navigate to it and return with the selected entry
-- Use a shared ViewModel scoped to the nav back stack to pass the selected entry back
+- Archived biomarkers must not appear in the picker
+- Sticky headers require `LazyColumn` with `stickyHeader {}` — not `LazyVerticalGrid`
+- `BiomarkerEntryDraft` is already in `AddLabResultModels.kt` — import from there
 
 ## References
 
-- @context/specs/phase2-1-add-lab-result-screen-spec.md
+- @context/specs/phase2-2-biomarker-picker-spec.md
 - @context/coding-standards.md
 
 ## History
