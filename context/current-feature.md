@@ -4,7 +4,7 @@ Phase 2.2 — Biomarker Picker Screen
 
 ## Status
 
-In-Progress
+Completed
 
 ## Goals
 
@@ -60,3 +60,11 @@ A searchable, categorized list of all biomarkers. The user picks one, enters a v
 - FAB on Dashboard navigates to Add Lab Result; NavRoutes sealed class added for non-tab destinations
 - BiomarkerEntryDraft and AddLabResultUiState extracted to AddLabResultModels.kt for Phase 2.2 reuse
 - LabResultDaoTest added
+- BiomarkerPickerScreen implemented — searchable, grouped by category with sticky headers, checkmark for already-added biomarkers
+- ValueInputDialog implemented — ref range helper text, positive-number validation, Add/Cancel
+- ViewModel hoisted out of composables; navigation driven via SharedFlow (entryAdded, navigateUp)
+- Search query resets on addEntry so picker opens clean each time
+- Routes/NavRoutes renamed to TabRoutes/FullScreenRoutes
+- Typography migrated from Google Fonts provider to bundled Inter font files
+- AddLabResultViewModelTest (unit) and ValueInputDialogTest (instrumented) added
+- mockk, mockk-android, kotlinx-coroutines-test added to version catalog
