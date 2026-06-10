@@ -90,7 +90,7 @@ private fun BiomarkerListRow(
         IconButton(onClick = onTogglePin) {
             Icon(
                 imageVector = if (biomarker.isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin,
-                contentDescription = if (biomarker.isPinned) "Unpin" else "Pin",
+                contentDescription = if (biomarker.isPinned) "Unpin ${biomarker.name}" else "Pin ${biomarker.name}",
                 tint = if (biomarker.isPinned) {
                     MaterialTheme.colorScheme.primary
                 } else {

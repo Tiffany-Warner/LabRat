@@ -28,7 +28,7 @@ interface BiomarkerEntryDao {
         FROM biomarker_entries be
         INNER JOIN lab_results lr ON be.labResultId = lr.id
         WHERE be.biomarkerId = :biomarkerId
-        ORDER BY lr.dateEpochDay DESC
+        ORDER BY lr.dateEpochDay DESC, be.id DESC
         LIMIT :limit
     """)
     suspend fun getRecentEntriesWithDate(biomarkerId: Long, limit: Int): List<BiomarkerEntryWithDate>
