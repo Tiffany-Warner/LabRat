@@ -4,7 +4,7 @@ Phase 3.1a — Biomarkers List & Pin Toggle
 
 ## Status
 
-In-Progress
+Completed
 
 ## Goals
 
@@ -69,3 +69,6 @@ Replace the placeholder Biomarkers tab with a real screen showing all non-archiv
 - GetPinnedBiomarkerSummariesUseCase — status (10% borderline) and trend logic in domain layer
 - BiomarkerStatus, BiomarkerTrend, PinnedBiomarkerSummary, BiomarkerEntryRecord domain models added
 - Room join query for date-ordered entry history (BiomarkerEntryWithDate projection)
+- BiomarkersScreen implemented — LazyColumn with sticky category headers, pin/unpin icon button per row
+- BiomarkersViewModel observes getAll() Flow, filters archived client-side, togglePin() persists via repository.update()
+- CategoryHeader extracted from BiomarkerPickerScreen to shared ui/components/ and reused in both screens
