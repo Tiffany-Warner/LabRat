@@ -1,6 +1,6 @@
 # Current Feature
 
-Phase 3.1 — Dashboard & Biomarker Status Cards
+Phase 3.1a — Biomarkers List & Pin Toggle
 
 ## Status
 
@@ -8,38 +8,36 @@ In-Progress
 
 ## Goals
 
-The home screen. Shows a grid of pinned biomarkers with their latest value, status, and trend at a glance.
+Replace the placeholder Biomarkers tab with a real screen showing all non-archived biomarkers. Users can pin/unpin biomarkers from here, which controls what appears on the Dashboard.
 
 ### Deliverables
 
-**Screen** (`ui/dashboard/DashboardScreen.kt`)
-- Replaces the Phase 1 placeholder
-- `LazyVerticalGrid` (2 columns) of `BiomarkerSummaryCard` components
-- Only pinned biomarkers appear — empty state if none pinned
-- Empty state: "Pin your first biomarker to get started" + button to Biomarkers tab
-- FAB navigates to Add Lab Result screen
+**Screen** (`ui/biomarkers/BiomarkersScreen.kt`)
+- `LazyColumn` with all non-archived biomarkers
+- Grouped by `BiomarkerCategory` with sticky section headers (same style as `BiomarkerPickerScreen`)
+- Each row: biomarker name, unit (subtitle), pin/unpin icon button (right side)
+- Filled pin icon when pinned, outlined when not
+- Tapping pin icon toggles `isPinned` in the database
 
-**`BiomarkerSummaryCard`** (`ui/dashboard/components/BiomarkerSummaryCard.kt`)
--  Biomarker name, latest value + unit, date of last result
-- Status dot: In Range / Borderline / Out of Range / Neutral
-- Trend arrow: ↑ ↓ → vs previous result (hidden if only one result)
-- Tapping navigates to Biomarker Detail (Phase 3.2)
+**ViewModel** (`ui/biomarkers/BiomarkersViewModel.kt`)
+- Loads all non-archived biomarkers via `BiomarkerRepository.getAll()`
+- Filters out archived biomarkers client-side
+- `UiState` sealed interface: `Loading`, `Success(biomarkers: List<Biomarker>)`
+- `togglePin(biomarkerId: Long)` — looks up biomarker, flips `isPinned`, calls `repository.update()`
 
-**Status color tokens** (defined in `ui/theme/`)
-- `StatusInRange`, `StatusBorderline`, `StatusOutOfRange`, `StatusNeutral`
-
-**`DashboardViewModel`** (`ui/dashboard/DashboardViewModel.kt`)
-- UiState sealed class: `Loading`, `Empty`, `Success(List<BiomarkerSummaryUiModel>)`
-- `BiomarkerSummaryUiModel`: name, latestValue, unit, date, status, trend
+**Shared component** (`ui/components/CategoryHeader.kt`)
+- Extract `CategoryHeader` composable from `BiomarkerPickerScreen` to shared location
+- Reuse in both `BiomarkersScreen` and `BiomarkerPickerScreen`
 
 ## Notes
 
-- Status and trend logic belongs in a domain-layer mapper, not in the ViewModel or composable
-- Cards should be consistent height regardless of content
+- Screen receives only state and callbacks — ViewModel hoisted to `LabRatNavHost`
+- After pinning here, Dashboard reactively updates via Flow observation
+- Use `Icons.Filled.PushPin` for pinned, `Icons.Outlined.PushPin` for unpinned
 
 ## References
 
-- @context/specs/phase3-1-dashboard-spec.md
+- @context/specs/phase3-1a-biomarkers-list-spec.md
 - @context/coding-standards.md
 
 ## History
@@ -67,3 +65,7 @@ The home screen. Shows a grid of pinned biomarkers with their latest value, stat
 - Typography migrated from Google Fonts provider to bundled Inter font files
 - AddLabResultViewModelTest (unit) and ValueInputDialogTest (instrumented) added
 - mockk, mockk-android, kotlinx-coroutines-test added to version catalog
+- Dashboard screen implemented — BiomarkerSummaryCard grid, status dots, trend arrows, loading/empty/success states
+- GetPinnedBiomarkerSummariesUseCase — status (10% borderline) and trend logic in domain layer
+- BiomarkerStatus, BiomarkerTrend, PinnedBiomarkerSummary, BiomarkerEntryRecord domain models added
+- Room join query for date-ordered entry history (BiomarkerEntryWithDate projection)

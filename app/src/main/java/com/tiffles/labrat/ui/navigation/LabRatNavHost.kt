@@ -22,6 +22,7 @@ import com.tiffles.labrat.ui.addresult.AddLabResultScreen
 import com.tiffles.labrat.ui.addresult.AddLabResultViewModel
 import com.tiffles.labrat.ui.addresult.BiomarkerPickerScreen
 import com.tiffles.labrat.ui.biomarkers.BiomarkersScreen
+import com.tiffles.labrat.ui.biomarkers.BiomarkersViewModel
 import com.tiffles.labrat.ui.dashboard.DashboardScreen
 import com.tiffles.labrat.ui.dashboard.DashboardViewModel
 import com.tiffles.labrat.ui.history.HistoryScreen
@@ -51,7 +52,14 @@ fun LabRatNavHost(
                 },
             )
         }
-        composable(TabRoutes.Biomarkers.route) { BiomarkersScreen() }
+        composable(TabRoutes.Biomarkers.route) {
+            val viewModel: BiomarkersViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            BiomarkersScreen(
+                uiState = uiState,
+                onTogglePin = viewModel::togglePin,
+            )
+        }
         composable(TabRoutes.History.route) { HistoryScreen() }
         composable(TabRoutes.Settings.route) { SettingsScreen() }
         composable(FullScreenRoutes.AddLabResult.route) { entry ->

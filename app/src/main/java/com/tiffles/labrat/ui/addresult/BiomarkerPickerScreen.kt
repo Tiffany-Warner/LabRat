@@ -21,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -34,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tiffles.labrat.domain.model.Biomarker
 import com.tiffles.labrat.domain.model.BiomarkerCategory
+import com.tiffles.labrat.ui.components.CategoryHeader
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -132,24 +132,6 @@ fun BiomarkerPickerScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun CategoryHeader(
-    category: BiomarkerCategory,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        Text(
-            text = category.displayName,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        )
     }
 }
 
