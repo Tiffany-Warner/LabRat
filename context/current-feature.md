@@ -20,7 +20,7 @@ The home screen. Shows a grid of pinned biomarkers with their latest value, stat
 - FAB navigates to Add Lab Result screen
 
 **`BiomarkerSummaryCard`** (`ui/dashboard/components/BiomarkerSummaryCard.kt`)
-- Biomarker name, latest value + unit, date of last result
+-  Biomarker name, latest value + unit, date of last result
 - Status dot: In Range / Borderline / Out of Range / Neutral
 - Trend arrow: ↑ ↓ → vs previous result (hidden if only one result)
 - Tapping navigates to Biomarker Detail (Phase 3.2)

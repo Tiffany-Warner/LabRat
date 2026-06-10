@@ -2,20 +2,23 @@ package com.tiffles.labrat.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tiffles.labrat.domain.repository.BiomarkerRepository
+import com.tiffles.labrat.domain.usecase.GetPinnedBiomarkerSummariesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-// TODO: replace with full Dashboard ViewModel once Dashboard feature is implemented
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val biomarkerRepository: BiomarkerRepository
+    getPinnedBiomarkerSummaries: GetPinnedBiomarkerSummariesUseCase,
 ) : ViewModel() {
 
-    fun triggerDatabaseInit() {
-        viewModelScope.launch {
-            biomarkerRepository.getAll().collect {}
+    val uiState: StateFlow<DashboardUiState> = getPinnedBiomarkerSummaries()
+        .map { summaries ->
+            if (summaries.isEmpty()) DashboardUiState.Empty
+            else DashboardUiState.Success(summaries)
         }
-    }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DashboardUiState.Loading)
 }

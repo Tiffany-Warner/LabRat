@@ -23,6 +23,7 @@ import com.tiffles.labrat.ui.addresult.AddLabResultViewModel
 import com.tiffles.labrat.ui.addresult.BiomarkerPickerScreen
 import com.tiffles.labrat.ui.biomarkers.BiomarkersScreen
 import com.tiffles.labrat.ui.dashboard.DashboardScreen
+import com.tiffles.labrat.ui.dashboard.DashboardViewModel
 import com.tiffles.labrat.ui.history.HistoryScreen
 import com.tiffles.labrat.ui.settings.SettingsScreen
 
@@ -36,7 +37,20 @@ fun LabRatNavHost(
         startDestination = TabRoutes.Dashboard.route,
         modifier = modifier
     ) {
-        composable(TabRoutes.Dashboard.route) { DashboardScreen() }
+        composable(TabRoutes.Dashboard.route) {
+            val viewModel: DashboardViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            DashboardScreen(
+                uiState = uiState,
+                onNavigateToBiomarkers = {
+                    navController.navigate(TabRoutes.Biomarkers.route) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
+        }
         composable(TabRoutes.Biomarkers.route) { BiomarkersScreen() }
         composable(TabRoutes.History.route) { HistoryScreen() }
         composable(TabRoutes.Settings.route) { SettingsScreen() }

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tiffles.labrat.data.local.entity.BiomarkerEntryEntity
+import com.tiffles.labrat.data.local.entity.BiomarkerEntryWithDate
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,4 +22,14 @@ interface BiomarkerEntryDao {
 
     @Query("SELECT * FROM biomarker_entries WHERE labResultId = :labResultId")
     suspend fun getEntriesForLabResult(labResultId: Long): List<BiomarkerEntryEntity>
+
+    @Query("""
+        SELECT be.value, lr.dateEpochDay
+        FROM biomarker_entries be
+        INNER JOIN lab_results lr ON be.labResultId = lr.id
+        WHERE be.biomarkerId = :biomarkerId
+        ORDER BY lr.dateEpochDay DESC
+        LIMIT :limit
+    """)
+    suspend fun getRecentEntriesWithDate(biomarkerId: Long, limit: Int): List<BiomarkerEntryWithDate>
 }
