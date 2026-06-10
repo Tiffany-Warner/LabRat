@@ -43,18 +43,19 @@ abstract class DatabaseModule {
 
         @Provides @Singleton
         fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-            lateinit var database: AppDatabase
-            database = Room.databaseBuilder(context, AppDatabase::class.java, "labrat.db")
+            var db: AppDatabase? = null
+            db = Room.databaseBuilder(context, AppDatabase::class.java, "labrat.db")
                 .addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
+                    override fun onCreate(sqLiteDatabase: SupportSQLiteDatabase) {
+                        super.onCreate(sqLiteDatabase)
+                        // Unmanaged scope intentional — seed runs once on DB creation only
                         CoroutineScope(Dispatchers.IO).launch {
-                            database.biomarkerDao().insertAll(BiomarkerSeeds.all)
+                            db?.biomarkerDao()?.insertAll(BiomarkerSeeds.all)
                         }
                     }
                 })
                 .build()
-            return database
+            return db
         }
 
         @Provides
@@ -65,5 +66,6 @@ abstract class DatabaseModule {
 
         @Provides
         fun provideBiomarkerEntryDao(db: AppDatabase): BiomarkerEntryDao = db.biomarkerEntryDao()
+
     }
 }

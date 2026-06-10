@@ -1,5 +1,6 @@
 package com.tiffles.labrat.ui.addresult
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tiffles.labrat.domain.model.Biomarker
@@ -8,6 +9,7 @@ import com.tiffles.labrat.domain.model.LabResult
 import com.tiffles.labrat.domain.repository.BiomarkerRepository
 import com.tiffles.labrat.domain.usecase.SaveLabResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -27,6 +29,10 @@ class AddLabResultViewModel @Inject constructor(
     private val saveLabResultUseCase: SaveLabResultUseCase,
     private val biomarkerRepository: BiomarkerRepository,
 ) : ViewModel() {
+
+    @VisibleForTesting
+    internal var testScope: CoroutineScope? = null
+    private val scope get() = testScope ?: viewModelScope
 
     private val _uiState = MutableStateFlow(AddLabResultUiState())
     val uiState: StateFlow<AddLabResultUiState> = _uiState.asStateFlow()
@@ -64,7 +70,7 @@ class AddLabResultViewModel @Inject constructor(
         _uiState.update { it.copy(pendingEntries = it.pendingEntries - draft) }
 
     fun saveLabResult() {
-        viewModelScope.launch {
+        scope.launch {
             _uiState.update { it.copy(isSaving = true, error = null) }
             val state = _uiState.value
             val labResult = LabResult(

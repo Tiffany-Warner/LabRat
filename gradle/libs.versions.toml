@@ -14,6 +14,8 @@ ksp = "2.0.21-1.0.25"
 room = "2.6.1"
 navigationCompose = "2.8.0"
 vico = "2.0.0-alpha.21"
+kotlinxCoroutines = "1.9.0"
+mockk = "1.13.10"
 kotlinxSerializationJson = "1.7.3"
 junitJunit = "4.12"
 
@@ -42,6 +44,9 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
