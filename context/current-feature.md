@@ -1,46 +1,45 @@
 # Current Feature
 
-Phase 2.2 — Biomarker Picker Screen
+Phase 3.1 — Dashboard & Biomarker Status Cards
 
 ## Status
 
-Completed
+In-Progress
 
 ## Goals
 
-A searchable, categorized list of all biomarkers. The user picks one, enters a value, and returns to the Add Lab Result screen with the entry added.
+The home screen. Shows a grid of pinned biomarkers with their latest value, status, and trend at a glance.
 
 ### Deliverables
 
-**Screen** (`ui/addresult/BiomarkerPickerScreen.kt`)
-- Full screen (not a bottom sheet)
-- Search bar at the top — filters biomarkers by name in real time
-- Results grouped by `BiomarkerCategory` with sticky section headers
-- Each row shows biomarker name and unit
-- Already-added biomarkers shown with a checkmark and muted style — still tappable to re-add
-- Tapping a biomarker opens `ValueInputDialog`
+**Screen** (`ui/dashboard/DashboardScreen.kt`)
+- Replaces the Phase 1 placeholder
+- `LazyVerticalGrid` (2 columns) of `BiomarkerSummaryCard` components
+- Only pinned biomarkers appear — empty state if none pinned
+- Empty state: "Pin your first biomarker to get started" + button to Biomarkers tab
+- FAB navigates to Add Lab Result screen
 
-**Value Input Dialog** (`ui/addresult/ValueInputDialog.kt`)
-- Shows biomarker name, unit, and reference range as helper text
-- Numeric input field (positive numbers only)
-- "Add" button — disabled until input is valid
-- "Cancel" dismisses the dialog
-- On confirm: calls `addEntry()` on the shared ViewModel and navigates back
+**`BiomarkerSummaryCard`** (`ui/dashboard/components/BiomarkerSummaryCard.kt`)
+- Biomarker name, latest value + unit, date of last result
+- Status dot: In Range / Borderline / Out of Range / Neutral
+- Trend arrow: ↑ ↓ → vs previous result (hidden if only one result)
+- Tapping navigates to Biomarker Detail (Phase 3.2)
 
-**ViewModel**
-- Reuse shared `AddLabResultViewModel` scoped to the nav back stack
-- Expose `allBiomarkers: Flow<List<Biomarker>>` and `searchQuery` state
-- Filter biomarkers client-side based on `searchQuery`
+**Status color tokens** (defined in `ui/theme/`)
+- `StatusInRange`, `StatusBorderline`, `StatusOutOfRange`, `StatusNeutral`
+
+**`DashboardViewModel`** (`ui/dashboard/DashboardViewModel.kt`)
+- UiState sealed class: `Loading`, `Empty`, `Success(List<BiomarkerSummaryUiModel>)`
+- `BiomarkerSummaryUiModel`: name, latestValue, unit, date, status, trend
 
 ## Notes
 
-- Archived biomarkers must not appear in the picker
-- Sticky headers require `LazyColumn` with `stickyHeader {}` — not `LazyVerticalGrid`
-- `BiomarkerEntryDraft` is already in `AddLabResultModels.kt` — import from there
+- Status and trend logic belongs in a domain-layer mapper, not in the ViewModel or composable
+- Cards should be consistent height regardless of content
 
 ## References
 
-- @context/specs/phase2-2-biomarker-picker-spec.md
+- @context/specs/phase3-1-dashboard-spec.md
 - @context/coding-standards.md
 
 ## History
