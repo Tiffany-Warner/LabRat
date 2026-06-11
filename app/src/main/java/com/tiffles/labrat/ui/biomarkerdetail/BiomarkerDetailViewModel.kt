@@ -36,7 +36,7 @@ class BiomarkerDetailViewModel @Inject constructor(
         selectedRange,
     ) { biomarker, allEntries, range ->
         biomarker ?: return@combine BiomarkerDetailUiState.NotFound
-        val cutoff = range.cutoffDate()
+        val cutoff = range.cutoffDate(LocalDate.now())
         val filtered = if (cutoff != null) allEntries.filter { it.date >= cutoff } else allEntries
         val entries = filtered.mapIndexed { index, record ->
             val previous = filtered.getOrNull(index + 1)
@@ -65,10 +65,10 @@ class BiomarkerDetailViewModel @Inject constructor(
         }
     }
 
-    private fun DateRange.cutoffDate(): LocalDate? = when (this) {
-        DateRange.THREE_MONTHS -> LocalDate.now().minusMonths(3)
-        DateRange.SIX_MONTHS -> LocalDate.now().minusMonths(6)
-        DateRange.ONE_YEAR -> LocalDate.now().minusYears(1)
+    private fun DateRange.cutoffDate(today: LocalDate): LocalDate? = when (this) {
+        DateRange.THREE_MONTHS -> today.minusMonths(3)
+        DateRange.SIX_MONTHS -> today.minusMonths(6)
+        DateRange.ONE_YEAR -> today.minusYears(1)
         DateRange.ALL -> null
     }
 
