@@ -96,6 +96,18 @@ fun BiomarkerDetailScreen(
                     CircularProgressIndicator()
                 }
             }
+            BiomarkerDetailUiState.NotFound -> {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "Biomarker not found",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             is BiomarkerDetailUiState.Success -> {
                 BiomarkerDetailContent(
                     uiState = uiState,

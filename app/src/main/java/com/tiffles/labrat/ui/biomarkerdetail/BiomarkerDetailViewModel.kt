@@ -35,7 +35,7 @@ class BiomarkerDetailViewModel @Inject constructor(
         entryRepository.getAllEntriesForBiomarker(biomarkerId),
         selectedRange,
     ) { biomarker, allEntries, range ->
-        biomarker ?: return@combine BiomarkerDetailUiState.Loading
+        biomarker ?: return@combine BiomarkerDetailUiState.NotFound
         val cutoff = range.cutoffDate()
         val filtered = if (cutoff != null) allEntries.filter { it.date >= cutoff } else allEntries
         val entries = filtered.mapIndexed { index, record ->

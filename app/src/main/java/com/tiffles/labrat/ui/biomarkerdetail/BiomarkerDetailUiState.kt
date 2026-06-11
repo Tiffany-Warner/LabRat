@@ -6,6 +6,7 @@ import com.tiffles.labrat.domain.model.DateRange
 
 sealed interface BiomarkerDetailUiState {
     data object Loading : BiomarkerDetailUiState
+    data object NotFound : BiomarkerDetailUiState
     data class Success(
         val biomarker: Biomarker,
         val entries: List<BiomarkerDetailEntry>,

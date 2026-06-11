@@ -28,7 +28,7 @@ fun StatusDot(
     )
 }
 
-fun BiomarkerStatus.color(): Color = when (this) {
+private fun BiomarkerStatus.color(): Color = when (this) {
     BiomarkerStatus.IN_RANGE -> StatusInRange
     BiomarkerStatus.BORDERLINE -> StatusBorderline
     BiomarkerStatus.OUT_OF_RANGE -> StatusOutOfRange
