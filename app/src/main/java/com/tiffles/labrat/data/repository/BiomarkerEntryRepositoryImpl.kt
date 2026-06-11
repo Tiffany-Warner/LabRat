@@ -18,6 +18,16 @@ class BiomarkerEntryRepositoryImpl @Inject constructor(
     override fun getEntriesForBiomarker(biomarkerId: Long): Flow<List<BiomarkerEntry>> =
         dao.getEntriesForBiomarker(biomarkerId).map { entities -> entities.map { it.toDomain() } }
 
+    override fun getAllEntriesForBiomarker(biomarkerId: Long): Flow<List<BiomarkerEntryRecord>> =
+        dao.getAllEntriesWithDate(biomarkerId).map { list ->
+            list.map { entry ->
+                BiomarkerEntryRecord(
+                    value = entry.value,
+                    date = LocalDate.ofEpochDay(entry.dateEpochDay),
+                )
+            }
+        }
+
     override suspend fun getEntriesForLabResult(labResultId: Long): List<BiomarkerEntry> =
         dao.getEntriesForLabResult(labResultId).map { it.toDomain() }
 

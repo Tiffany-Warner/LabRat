@@ -30,6 +30,7 @@ import java.time.LocalDate
 fun DashboardScreen(
     uiState: DashboardUiState,
     onNavigateToBiomarkers: () -> Unit,
+    onNavigateToBiomarkerDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (uiState) {
@@ -68,7 +69,7 @@ fun DashboardScreen(
                 items(uiState.summaries, key = { it.biomarkerId }) { summary ->
                     BiomarkerSummaryCard(
                         summary = summary,
-                        onClick = { /* Phase 3.2: navigate to Biomarker Detail */ },
+                        onClick = { onNavigateToBiomarkerDetail(summary.biomarkerId) },
                     )
                 }
             }
@@ -79,13 +80,13 @@ fun DashboardScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DashboardScreenLoadingPreview() {
-    LabRatTheme { DashboardScreen(uiState = DashboardUiState.Loading, onNavigateToBiomarkers = {}) }
+    LabRatTheme { DashboardScreen(uiState = DashboardUiState.Loading, onNavigateToBiomarkers = {}, onNavigateToBiomarkerDetail = {}) }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DashboardScreenEmptyPreview() {
-    LabRatTheme { DashboardScreen(uiState = DashboardUiState.Empty, onNavigateToBiomarkers = {}) }
+    LabRatTheme { DashboardScreen(uiState = DashboardUiState.Empty, onNavigateToBiomarkers = {}, onNavigateToBiomarkerDetail = {}) }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -102,6 +103,7 @@ private fun DashboardScreenSuccessPreview() {
                 )
             ),
             onNavigateToBiomarkers = {},
+            onNavigateToBiomarkerDetail = {},
         )
     }
 }

@@ -1,43 +1,42 @@
 # Current Feature
 
-Phase 3.1 & 3.1a — Dashboard & Biomarkers List
+Phase 3.2 — Biomarker Detail Screen
 
 ## Status
 
-Completed
+In Progress
 
 ## Goals
 
-Replace the placeholder Biomarkers tab with a real screen showing all non-archived biomarkers. Users can pin/unpin biomarkers from here, which controls what appears on the Dashboard.
+Tapping a biomarker card opens a detail screen with its metadata, a placeholder for the trend chart (Phase 3.3), and a scrollable history of all logged values.
 
 ### Deliverables
 
-**Screen** (`ui/biomarkers/BiomarkersScreen.kt`)
-- `LazyColumn` with all non-archived biomarkers
-- Grouped by `BiomarkerCategory` with sticky section headers (same style as `BiomarkerPickerScreen`)
-- Each row: biomarker name, unit (subtitle), pin/unpin icon button (right side)
-- Filled pin icon when pinned, outlined when not
-- Tapping pin icon toggles `isPinned` in the database
+**Screen** (`ui/biomarkerdetail/BiomarkerDetailScreen.kt`)
+- Accepts `biomarkerId: Long` as a nav argument
+- Top section: biomarker name (large), category badge, unit, reference range text (e.g. "Ref: 70–99 mg/dL") or "No reference range set", pin/unpin toggle in top bar
+- Chart placeholder — a `Box` with a "Chart coming soon" label (replaced in Phase 3.3)
+- Date range filter segmented control: **3M / 6M / 1Y / All** — filters the history list even before chart exists
+- Result history list:
+  - Each row: date, value + unit, status dot, delta vs previous (e.g. "+4.2" or "−1.1")
+  - Most recent first
+  - Empty state: "No results logged yet"
 
-**ViewModel** (`ui/biomarkers/BiomarkersViewModel.kt`)
-- Loads all non-archived biomarkers via `BiomarkerRepository.getAll()`
-- Filters out archived biomarkers client-side
-- `UiState` sealed interface: `Loading`, `Success(biomarkers: List<Biomarker>)`
-- `togglePin(biomarkerId: Long)` — looks up biomarker, flips `isPinned`, calls `repository.update()`
-
-**Shared component** (`ui/components/CategoryHeader.kt`)
-- Extract `CategoryHeader` composable from `BiomarkerPickerScreen` to shared location
-- Reuse in both `BiomarkersScreen` and `BiomarkerPickerScreen`
+**ViewModel** (`ui/biomarkerdetail/BiomarkerDetailViewModel.kt`)
+- Loads biomarker metadata and all entries sorted by date desc
+- `UiState`: `Loading`, `Success(biomarker, filteredEntries, selectedRange)`
+- `setDateRange(range)` — updates which entries are shown
+- `togglePin()` — updates `isPinned` in the database
 
 ## Notes
 
-- Screen receives only state and callbacks — ViewModel hoisted to `LabRatNavHost`
-- After pinning here, Dashboard reactively updates via Flow observation
-- Use `Icons.Filled.PushPin` for pinned, `Icons.Outlined.PushPin` for unpinned
+- Delta: `currentValue - previousValue`, formatted with sign (e.g. "+2.1", "−0.8")
+- Keep chart area as a clearly marked placeholder — Phase 3.3 drops the real chart in
+- Navigation: tapping a `BiomarkerSummaryCard` on the Dashboard navigates here with `biomarkerId`
 
 ## References
 
-- @context/specs/phase3-1a-biomarkers-list-spec.md
+- @context/specs/phase3-2-biomarker-detail-screen-spec.md
 - @context/coding-standards.md
 
 ## History

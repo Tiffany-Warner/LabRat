@@ -25,4 +25,7 @@ sealed class TabRoutes(
 sealed class FullScreenRoutes(val route: String) {
     data object AddLabResult : FullScreenRoutes("add_lab_result")
     data object BiomarkerPicker : FullScreenRoutes("biomarker_picker")
+    data object BiomarkerDetail : FullScreenRoutes("biomarker_detail/{biomarkerId}") {
+        fun createRoute(biomarkerId: Long) = "biomarker_detail/$biomarkerId"
+    }
 }

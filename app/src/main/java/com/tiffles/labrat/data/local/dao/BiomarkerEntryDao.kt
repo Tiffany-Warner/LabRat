@@ -11,6 +11,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BiomarkerEntryDao {
+
+    @Query("""
+        SELECT be.value, lr.dateEpochDay
+        FROM biomarker_entries be
+        INNER JOIN lab_results lr ON be.labResultId = lr.id
+        WHERE be.biomarkerId = :biomarkerId
+        ORDER BY lr.dateEpochDay DESC, be.id DESC
+    """)
+    fun getAllEntriesWithDate(biomarkerId: Long): Flow<List<BiomarkerEntryWithDate>>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entry: BiomarkerEntryEntity): Long
 

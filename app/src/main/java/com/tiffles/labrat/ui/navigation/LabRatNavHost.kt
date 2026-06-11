@@ -18,9 +18,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.tiffles.labrat.ui.addresult.AddLabResultScreen
 import com.tiffles.labrat.ui.addresult.AddLabResultViewModel
 import com.tiffles.labrat.ui.addresult.BiomarkerPickerScreen
+import com.tiffles.labrat.ui.biomarkerdetail.BiomarkerDetailScreen
+import com.tiffles.labrat.ui.biomarkerdetail.BiomarkerDetailViewModel
 import com.tiffles.labrat.ui.biomarkers.BiomarkersScreen
 import com.tiffles.labrat.ui.biomarkers.BiomarkersViewModel
 import com.tiffles.labrat.ui.dashboard.DashboardScreen
@@ -50,6 +54,9 @@ fun LabRatNavHost(
                         restoreState = true
                     }
                 },
+                onNavigateToBiomarkerDetail = { biomarkerId ->
+                    navController.navigate(FullScreenRoutes.BiomarkerDetail.createRoute(biomarkerId))
+                },
             )
         }
         composable(TabRoutes.Biomarkers.route) {
@@ -77,6 +84,19 @@ fun LabRatNavHost(
                 onNotesChange = viewModel::updateNotes,
                 onRemoveEntry = viewModel::removeEntry,
                 onSave = viewModel::saveLabResult,
+            )
+        }
+        composable(
+            route = FullScreenRoutes.BiomarkerDetail.route,
+            arguments = listOf(navArgument("biomarkerId") { type = NavType.LongType }),
+        ) {
+            val viewModel: BiomarkerDetailViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            BiomarkerDetailScreen(
+                uiState = uiState,
+                onNavigateUp = { navController.navigateUp() },
+                onTogglePin = viewModel::togglePin,
+                onSelectRange = viewModel::setDateRange,
             )
         }
         composable(FullScreenRoutes.BiomarkerPicker.route) { entry ->

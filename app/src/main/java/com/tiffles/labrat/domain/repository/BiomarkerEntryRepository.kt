@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BiomarkerEntryRepository {
     fun getEntriesForBiomarker(biomarkerId: Long): Flow<List<BiomarkerEntry>>
+    fun getAllEntriesForBiomarker(biomarkerId: Long): Flow<List<BiomarkerEntryRecord>>
     suspend fun getEntriesForLabResult(labResultId: Long): List<BiomarkerEntry>
     /** Lightweight projection for summary views — returns only value and date, ordered most-recent first. */
     suspend fun getRecentEntries(biomarkerId: Long, limit: Int): List<BiomarkerEntryRecord>
