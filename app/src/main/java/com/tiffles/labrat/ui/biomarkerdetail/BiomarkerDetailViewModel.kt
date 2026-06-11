@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tiffles.labrat.domain.model.Biomarker
 import com.tiffles.labrat.domain.model.BiomarkerDetailEntry
-import com.tiffles.labrat.domain.model.BiomarkerStatus
 import com.tiffles.labrat.domain.model.DateRange
+import com.tiffles.labrat.domain.model.computeBiomarkerStatus
 import com.tiffles.labrat.domain.repository.BiomarkerEntryRepository
 import com.tiffles.labrat.domain.repository.BiomarkerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +43,7 @@ class BiomarkerDetailViewModel @Inject constructor(
             BiomarkerDetailEntry(
                 value = record.value,
                 date = record.date,
-                status = computeStatus(biomarker, record.value),
+                status = computeBiomarkerStatus(biomarker, record.value),
                 delta = previous?.let { record.value - it.value },
             )
         }
@@ -72,18 +72,5 @@ class BiomarkerDetailViewModel @Inject constructor(
         DateRange.ALL -> null
     }
 
-    private fun computeStatus(biomarker: Biomarker, value: Double): BiomarkerStatus {
-        val low = biomarker.refRangeLow
-        val high = biomarker.refRangeHigh
-        if (low == null && high == null) return BiomarkerStatus.NEUTRAL
-        val belowLow = low != null && value < low
-        val aboveHigh = high != null && value > high
-        if (!belowLow && !aboveHigh) return BiomarkerStatus.IN_RANGE
-        val borderline = when {
-            belowLow -> value >= low!! * 0.90
-            aboveHigh -> value <= high!! * 1.10
-            else -> false
-        }
-        return if (borderline) BiomarkerStatus.BORDERLINE else BiomarkerStatus.OUT_OF_RANGE
-    }
+
 }

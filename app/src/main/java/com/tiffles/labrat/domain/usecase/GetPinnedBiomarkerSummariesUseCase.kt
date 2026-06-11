@@ -1,7 +1,7 @@
 package com.tiffles.labrat.domain.usecase
 
 import com.tiffles.labrat.domain.model.Biomarker
-import com.tiffles.labrat.domain.model.BiomarkerStatus
+import com.tiffles.labrat.domain.model.computeBiomarkerStatus
 import com.tiffles.labrat.domain.model.BiomarkerTrend
 import com.tiffles.labrat.domain.model.PinnedBiomarkerSummary
 import com.tiffles.labrat.domain.repository.BiomarkerEntryRepository
@@ -29,28 +29,11 @@ class GetPinnedBiomarkerSummariesUseCase @Inject constructor(
                         latestValue = latest.value,
                         unit = biomarker.unit,
                         date = latest.date,
-                        status = computeStatus(biomarker, latest.value),
+                        status = computeBiomarkerStatus(biomarker, latest.value),
                         trend = previous?.let { computeTrend(latest.value, it.value) },
                     )
                 }
         }
-
-    private fun computeStatus(biomarker: Biomarker, value: Double): BiomarkerStatus {
-        val low = biomarker.refRangeLow
-        val high = biomarker.refRangeHigh
-        if (low == null && high == null) return BiomarkerStatus.NEUTRAL
-
-        val belowLow = low != null && value < low
-        val aboveHigh = high != null && value > high
-        if (!belowLow && !aboveHigh) return BiomarkerStatus.IN_RANGE
-
-        val borderline = when {
-            belowLow -> value >= low!! * 0.90
-            aboveHigh -> value <= high!! * 1.10
-            else -> false
-        }
-        return if (borderline) BiomarkerStatus.BORDERLINE else BiomarkerStatus.OUT_OF_RANGE
-    }
 
     private fun computeTrend(latest: Double, previous: Double): BiomarkerTrend = when {
         latest > previous -> BiomarkerTrend.UP
