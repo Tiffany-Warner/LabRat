@@ -63,22 +63,25 @@ fun BiomarkerDetailScreen(
     onSelectRange: (DateRange) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val success = uiState as? BiomarkerDetailUiState.Success
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(success?.biomarker?.name ?: "") },
+                title = {
+                    if (uiState is BiomarkerDetailUiState.Success) {
+                        Text(uiState.biomarker.name)
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onNavigateUp) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    if (success != null) {
+                    if (uiState is BiomarkerDetailUiState.Success) {
                         IconButton(onClick = onTogglePin) {
                             Icon(
-                                imageVector = if (success.biomarker.isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin,
-                                contentDescription = if (success.biomarker.isPinned) "Unpin" else "Pin",
+                                imageVector = if (uiState.biomarker.isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin,
+                                contentDescription = if (uiState.biomarker.isPinned) "Unpin" else "Pin",
                             )
                         }
                     }

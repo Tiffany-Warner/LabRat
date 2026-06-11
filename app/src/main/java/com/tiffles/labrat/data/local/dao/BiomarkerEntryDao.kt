@@ -26,7 +26,7 @@ interface BiomarkerEntryDao {
     @Delete
     suspend fun delete(entry: BiomarkerEntryEntity)
 
-    @Query("SELECT * FROM biomarker_entries WHERE biomarkerId = :biomarkerId ORDER BY rowid ASC")
+    @Query("SELECT * FROM biomarker_entries WHERE biomarkerId = :biomarkerId ORDER BY id ASC")
     fun getEntriesForBiomarker(biomarkerId: Long): Flow<List<BiomarkerEntryEntity>>
 
     @Query("SELECT * FROM biomarker_entries WHERE labResultId = :labResultId")
