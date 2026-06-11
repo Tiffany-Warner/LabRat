@@ -40,7 +40,7 @@
 - [x] Input validation (numeric ranges, units)
 - [x] Save lab result
 - [ ] Delete lab result
-- [ ] Empty state on Dashboard when no data exists
+- [x] Empty state on Dashboard when no data exists
 
 ---
 
@@ -48,12 +48,12 @@
 
 > Goal: Make the data beautiful and immediately useful.
 
-- [ ] Dashboard screen — summary cards for key biomarkers (most recently updated)
-- [ ] Color-coded status indicators: In Range 🟢 / Borderline 🟡 / Out of Range 🔴
+- [x] Dashboard screen — summary cards for pinned biomarkers with status dot and trend arrow
+- [x] Color-coded status indicators: In Range 🟢 / Borderline 🟡 / Out of Range 🔴
 - [ ] Biomarker detail screen — trend line chart over time (Vico)
 - [ ] Reference range overlay on chart
 - [ ] Date range filter (3 months / 6 months / 1 year / All time)
-- [ ] Biomarker list screen — all tracked markers, sortable by category or status
+- [x] Biomarker list screen — all tracked markers, grouped by category
 
 ---
 
@@ -75,7 +75,7 @@
 
 - [ ] Custom biomarker creation (name, unit, reference range)
 - [ ] Edit reference ranges per biomarker (personalized targets)
-- [ ] Pin/favorite biomarkers to Dashboard
+- [x] Pin/favorite biomarkers to Dashboard
 - [ ] Archive/hide unused biomarkers
 - [ ] Biomarker category management
 

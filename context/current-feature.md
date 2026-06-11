@@ -1,6 +1,6 @@
 # Current Feature
 
-Phase 3.1a — Biomarkers List & Pin Toggle
+Phase 3.1 & 3.1a — Dashboard & Biomarkers List
 
 ## Status
 
@@ -72,3 +72,5 @@ Replace the placeholder Biomarkers tab with a real screen showing all non-archiv
 - BiomarkersScreen implemented — LazyColumn with sticky category headers, pin/unpin icon button per row
 - BiomarkersViewModel observes getAll() Flow, filters archived client-side, togglePin() persists via repository.update()
 - CategoryHeader extracted from BiomarkerPickerScreen to shared ui/components/ and reused in both screens
+- All unit and instrumented tests passing (52 instrumented, all unit tests green)
+- DAO query fixed: ORDER BY dateEpochDay DESC, id DESC to correctly order same-date entries by insertion
